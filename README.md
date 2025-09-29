@@ -1,6 +1,6 @@
 ## 后端服务（Node.js + Express + MongoDB）
 
-本项目为管理系统的后端服务，基于 Express 与 Mongoose，提供用户认证、员工管理、事项管理等 REST API。本文档包含：本地开发指南、环境变量说明、API 概览，以及在 Render 平台上的一键部署步骤。
+本项目为管理系统的后端服务，基于 Express 与 Mongoose，提供用户认证和员工管理等REST API。本文档包含：本地开发指南、环境变量说明、API 概览，以及在 Render 平台上的一键部署步骤。
 
 ---
 
@@ -121,13 +121,12 @@ curl -H "Authorization: Bearer $TOKEN" \
 以下步骤将把本服务部署为 Render 的 Web Service：
 
 1. 准备工作
-   - 将代码推送到 GitHub/GitLab。
    - 准备 MongoDB Atlas 数据库，拿到连接串（示例：`mongodb+srv://<user>:<pass>@<cluster>/<db>?retryWrites=true&w=majority`）。
 
 2. 在 Render 控制台创建服务
    - New + → Web Service。
    - 关联到本仓库，选择分支 `main`。
-   - Root Directory：选择本项目后端目录（例如 `backend/`）。
+   - Root Directory：选择本项目后端目录。
    - Runtime：Node
    - Build Command：`npm install`
    - Start Command：`npm start`
