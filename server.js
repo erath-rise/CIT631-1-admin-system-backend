@@ -37,7 +37,8 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+// 使用正则以兼容新版 path-to-regexp 对通配符的解析
+app.options(/.*/, cors(corsOptions));
 
 app.use(express.json());
 
