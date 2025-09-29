@@ -11,6 +11,8 @@ const app = express();
 // CORS 配置：允许来自 Vercel 前端及本地的请求，并正确处理预检请求
 const defaultAllowedOrigins = [
   "https://cit-631-1-admin-system.vercel.app",
+  "https://cit-631-1-admin-system-git-main-erathrises-projects.vercel.app",
+  "https://cit-631-1-admin-system-9xz8encls-erathrises-projects.vercel.app/login",
   "http://localhost:3000",
   "http://127.0.0.1:3000"
 ];
