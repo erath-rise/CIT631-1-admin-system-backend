@@ -10,7 +10,7 @@ const app = express();
 
 // 允许跨域
 app.use(cors({
-    origin: "http://localhost:3000", // 前端地址
+    origin: process.env.CORS_ORIGIN, // 前端地址
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
