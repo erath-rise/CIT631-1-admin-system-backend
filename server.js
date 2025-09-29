@@ -8,19 +8,58 @@ connectDB();
 
 const app = express();
 
-// 允许跨域
-app.use(cors({
-    origin: process.env.CORS_ORIGIN, // 前端地址
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true
-  }));
+// CORS 配置：允许来自 Vercel 前端及本地的请求，并正确处理预检请求
+const defaultAllowedOrigins = [
+  "https://cit-631-1-admin-system.vercel.app",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000"
+];
+
+const envOrigins = (process.env.CORS_ORIGINS || process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map(o => o.trim())
+  .filter(Boolean);
+
+const allowedOrigins = envOrigins.length > 0 ? envOrigins : defaultAllowedOrigins;
+
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
+
 app.use(express.json());
 
+// 健康检查
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 // 路由
-app.use("/api/auth", require("./src/routes/auth"));
-app.use("/api/items", require("./src/routes/items"));
-app.use("/api/employees", require("./src/routes/employees"));
+const authRouter = require("./src/routes/auth");
+const itemsRouter = require("./src/routes/items");
+const employeesRouter = require("./src/routes/employees");
+
+// 兼容历史路径与无 /api 前缀的调用
+app.use("/api/auth", authRouter);
+app.use("/auth", authRouter);
+
+app.use("/api/items", itemsRouter);
+app.use("/items", itemsRouter);
+
+app.use("/api/employees", employeesRouter);
+app.use("/employees", employeesRouter);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
